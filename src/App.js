@@ -48,7 +48,7 @@ function App() {
               <h2>{item.timezone}</h2>
             </div>
             <div className="main_lower">
-              <h2 className="temperature">{item.current.temp}°C</h2>
+              <h2 className="temperature">{Math.round(item.current.temp)}°C</h2>
               <h2>{item.current.weather[0].main}</h2>
             </div>
           </div>
