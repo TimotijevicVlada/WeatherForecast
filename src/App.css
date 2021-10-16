@@ -101,10 +101,12 @@
   .weather_container .side_sector .side_upper {
     margin-right: 10px;
     width: 100%;
+    height: auto;
   }
   .side_lower {
     margin: 10px 0px 0px 0px;
     width: 100%;
+    height: auto;
   }
   .weather_container .side_sector .side_upper div {
     display: flex;
@@ -119,5 +121,6 @@
   }
   .weather_container .main_sector .main_lower {
     flex-direction: column;
+    align-items: flex-end;
   }
 }
