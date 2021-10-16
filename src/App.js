@@ -1,24 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
 import "./App.css";
+import moment from "moment";
 
 function App() {
   const key_weather = "857c9713e8955051b03bba131a833160";
 
   const [weather, setWeather] = useState([]);
-  const [date, setDate] = useState("");
-  console.log(date);
 
-  const updatedDate = () => {
-    const myDate = new Date();
-    console.log(myDate.toLocaleString());
-    const hours = myDate.getHours();
-    const minutes = myDate.getMinutes();
-    const seconds = myDate.getSeconds();
-    setDate(`${hours}:${minutes}:${seconds}`);
-  };
 
   //Get api request
   const getWeatherInfo = useCallback( () => {
+    //Getting coords from navigator geolocation
     navigator.geolocation.getCurrentPosition((success) => {
       const { latitude, longitude } = success.coords;
       fetch(
@@ -28,7 +20,6 @@ function App() {
         .then((data) => {
           console.log(data);
           setWeather([data]);
-          updatedDate();
         });
     });
   }, [])
@@ -44,12 +35,12 @@ function App() {
         <div className="weather_container" key={item.timezone}>
           <div className="main_sector">
             <div className="main_upper">
-              <h2>{date}</h2>
-              <h2>{item.timezone}</h2>
+              <h2>{moment(item.current.dt * 1000).format('LLLL')}</h2>
+              <p>{item.timezone}</p>
             </div>
             <div className="main_lower">
               <h2 className="temperature">{Math.round(item.current.temp)}°C</h2>
-              <h2>{item.current.weather[0].main}</h2>
+              <img src={`http://openweathermap.org/img/wn//${item.current.weather[0].icon}@4x.png`} alt={item.current.weather[0].description}/>
             </div>
           </div>
 
@@ -73,16 +64,17 @@ function App() {
               </div>
               <div>
                 <span className="title">SUNRICE</span>
-                <span>{item.current.sunrise}m</span>
+                <span>{moment(item.current.sunrise * 1000).format('LT')}</span>
               </div>
               <div>
                 <span className="title">SUNSET</span>
-                <span>{item.current.sunset}m</span>
+                <span>{moment(item.current.sunset * 1000).format('LT')}</span>
               </div>
             </div>
             <div className="side_lower">
               {item.daily.map((item) => (
                 <div className="weather_future" key={item.dt}>
+                  <div>{moment(item.dt * 1000).format('dddd').slice(0, 3)}</div>
                   <div><img src={`http://openweathermap.org/img/wn//${item.weather[0].icon}@4x.png`} alt={item.weather[0].description} className="weather_icon"/></div>
                   <div>{Math.round(item.temp.day)}°C</div>
                 </div>
